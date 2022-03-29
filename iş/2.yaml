@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: tr-dns-test
+  namespace: gokhanusta
+  labels:
+    app: tr-dns-test
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+    kubesphere.io/creator: nguneruygun
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tr-dns-test
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: tr-dns-test
+    spec:
+      containers:
+        - name: nsd-xvqj3c
+          image: 'hrb.usom.gov.tr/external/nsd:tekton'
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: nsd-exporter-n29rr3
+          image: 'hrb.usom.gov.tr/external/nsd_external:master'
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      serviceAccount: default
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

@@ -1,0 +1,52 @@
+    containers:
+    - name: redis
+        image: redis
+        volumeMounts:
+        - name: redis-storage
+        mountPath: /data/redis
+    volumes:
+    - name: redis-storage
+        emptyDir: {}
+
+
+    containers:
+        - name: container-xdofr4
+          image: 'hrb.usom.gov.tr/external/nsd:tekton'
+           volumeMounts:
+          - name: redis-storage
+          mountPath: /data/redis
+          ports:
+            - name: tcp-dns
+              containerPort: 53
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1200Mi
+            requests:
+              cpu: 520m
+              memory: 880Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+          volumes:
+          - name: workdir1
+            hostPath:
+                path: /var/log/pods
+
+        - name: container-v4u0bi
+          image: 'hrb.usom.gov.tr/external/nsd_external:master'
+          ports:
+            - name: http-ss
+              containerPort: 80
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 930m
+              memory: 1350Mi
+            requests:
+              cpu: 510m
+              memory: 1100Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
